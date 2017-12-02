@@ -42,9 +42,9 @@ function setup() {
 }
 
 function draw() {
-  background(255);
+  background(120, 30, 80);
 
-  for (let i = 0; i < bombs.length; i++) {
+  for (let i = bombs.length-1; i > 0; i--) {
     b = bombs[i];
     if (b.delete) bombs.splice(i, 1);
     b.update();

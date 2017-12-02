@@ -1,15 +1,16 @@
 import websockets.*;
 
-final float totalGrid = 10;
+final float totalGrid = 5;
 
 WebsocketServer ws;
 
-Player player;
+Player player;Lifes lifes;
+
 ArrayList<Bomb> bombs;
 
 void setup() {
-  size(576, 471, P3D);
-  //size(192, 157, P3D);
+  //size(576, 471, P3D);
+  size(192, 157, P3D);
 
   ws = new WebsocketServer(this, 8025, "/");
 
@@ -30,8 +31,16 @@ void draw() {
 
     b.update();
     if (b.explode()) {
-      println(player.explode(b));
-      bombs.remove(b);
+      println(player.explode(b));  
+      if(player.explode(b)  e;
+        pushMatrix();
+hit()     player.hit();
+          translate(b.pos.x, b.pos.y, b.pos.z);
+          fill(255,0,0);
+          sphere(100);
+        popMatrix();
+   ed){
+      bombs.remove   }
     }
 
     b.display();

@@ -1,17 +1,22 @@
 class Bomb {
   PVector pos;
   float size;
-
+  
+  boolean exploded;
+  
+  float burst;
+  
   Bomb(PVector _pos) {
     pos = _pos.copy();
     size = 5;
   }
   
   void update() {
-    pos.y += 0.5;
+    pos.y += 0.8;
   }
   
   boolean explode() {
+    burst = 0;
     return pos.y >= height - size;
   }
 
@@ -26,6 +31,6 @@ class Bomb {
     
     stroke(255, 0, 0);
     strokeWeight(1);
-    line(pos.x, pos.y, pos.z, pos.x, height, pos.z);
+    line(pos.x, pos.y, pos.z, pos.x, heightpos.z);
   }
 }
