@@ -15,6 +15,7 @@ void setup() {
   ws = new WebsocketServer(this, 8025, "/");
 
   player = new Player();
+  lifes = new Lifes(5);
   bombs = new ArrayList();
 }
 
@@ -25,22 +26,33 @@ void draw() {
 
   player.move(mouseX, mouseY - height);
   player.display();
-
+  lifes.display();
+  
   for (int i = bombs.size() - 1; i >= 0; i--) {
     Bomb b = bombs.get(i);
 
     b.update();
+    
     if (b.explode()) {
-      println(player.explode(b));  
-      if(player.explode(b)  e;
+      if(player.explode(b)) {
+        if(!b.hit){
         pushMatrix();
-hit()     player.hit();
+          lifes.lifes--;
+          player.hit();
           translate(b.pos.x, b.pos.y, b.pos.z);
           fill(255,0,0);
-          sphere(100);
+          //sphere(100);
         popMatrix();
-   ed){
-      bombs.remove   }
+        }
+        b.hit = true;
+      }
+      if(!b.hit){           //quita las que no explotan
+        bombs.remove(b); 
+      }
+      
+      if(b.remove){      //remove=1 después de la explosion
+        bombs.remove(b);    //quita las 
+      }
     }
 
     b.display();

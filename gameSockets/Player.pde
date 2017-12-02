@@ -34,7 +34,7 @@ class Player {
       box(size);
       hit=false;
     }
-    poMatrix();
+    popMatrix();
   }
 
 void hit()         {
