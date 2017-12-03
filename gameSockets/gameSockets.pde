@@ -1,19 +1,21 @@
 import websockets.*;
 
-final float totalGrid = 10;
+final float totalGrid = 5;
 
 WebsocketServer ws;
 
-Player player;
+Player player;Lifes lifes;
+
 ArrayList<Bomb> bombs;
 
 void setup() {
-  size(576, 471, P3D);
-  //size(192, 157, P3D);
+  //size(576, 471, P3D);
+  size(192, 157, P3D);
 
   ws = new WebsocketServer(this, 8025, "/");
 
   player = new Player();
+  lifes = new Lifes(5);
   bombs = new ArrayList();
 }
 
@@ -24,14 +26,33 @@ void draw() {
 
   player.move(mouseX, mouseY - height);
   player.display();
-
+  lifes.display();
+  
   for (int i = bombs.size() - 1; i >= 0; i--) {
     Bomb b = bombs.get(i);
 
     b.update();
+    
     if (b.explode()) {
-      println(player.explode(b));
-      bombs.remove(b);
+      if(player.explode(b)) {
+        if(!b.hit){
+        pushMatrix();
+          lifes.lifes--;
+          player.hit();
+          translate(b.pos.x, b.pos.y, b.pos.z);
+          fill(255,0,0);
+          //sphere(100);
+        popMatrix();
+        }
+        b.hit = true;
+      }
+      if(!b.hit){           //quita las que no explotan
+        bombs.remove(b); 
+      }
+      
+      if(b.remove){      //remove=1 después de la explosion
+        bombs.remove(b);    //quita las 
+      }
     }
 
     b.display();
