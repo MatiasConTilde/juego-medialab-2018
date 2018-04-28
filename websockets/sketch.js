@@ -5,8 +5,8 @@ class Player {
   }
 
   set text(text) {
-    this.x = text.substr(0, text.indexOf(','));
-    this.y = -text.substr(text.indexOf(',') + 1);
+    this.x = canvas.width*Number(text.substr(0, text.indexOf(',')));
+    this.y = canvas.height*Number(text.substr(text.indexOf(',')+1));
   }
 }
 
@@ -14,7 +14,7 @@ class Bomb {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    ws.send(x + "," + y);
+    ws.send(x/canvas.width + "," + y/canvas.height);
 
     this.radius = 100;
   }
@@ -32,7 +32,7 @@ class Bomb {
   }
 }
 
-var ws = new WebSocket('ws://localhost:8025/');
+var ws = new WebSocket('ws://192.168.2.140:8001');
 
 let bombs = [];
 let player = new Player();

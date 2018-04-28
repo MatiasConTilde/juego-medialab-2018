@@ -14,7 +14,7 @@ void setup() {
   size(192, 157, P3D);
   //upnp = new Upnp(1234,true);
   //ws = new WebsocketServer(this, upnp.getPort(), upnp.getLocalAddress());
-  ws = new WebsocketServer(this, 8001,"/");
+  ws = new WebsocketServer(this, 8001, "");
 
   player = new Player();
   lifes = new Lifes(5);
@@ -29,31 +29,31 @@ void draw() {
   player.move(mouseX, mouseY - height);
   player.display();
   lifes.display();
-  
+
   for (int i = bombs.size() - 1; i >= 0; i--) {
     Bomb b = bombs.get(i);
 
     b.update();
-    
+
     if (b.explode()) {
-      if(player.explode(b)) {
-        if(!b.hit){
-        pushMatrix();
+      if (player.explode(b)) {
+        if (!b.hit) {
+          pushMatrix();
           lifes.lifes--;
           player.hit();
           translate(b.pos.x, b.pos.y, b.pos.z);
-          fill(255,0,0);
+          fill(255, 0, 0);
           //sphere(100);
-        popMatrix();
+          popMatrix();
         }
         b.hit = true;
       }
-      if(!b.hit){           //quita las que no explotan
-        bombs.remove(b); 
+      if (!b.hit) {           //quita las que no explotan
+        bombs.remove(b);
       }
-      
-      if(b.remove){      //remove=1 después de la explosion
-        bombs.remove(b);    //quita las 
+
+      if (b.remove) {      //remove=1 después de la explosion
+        bombs.remove(b);    //quita las
       }
     }
 
@@ -67,10 +67,9 @@ void keyPressed() {
 
 void webSocketServerEvent(String msg) {
   println(msg);
-  
-  float x = int(msg.substring(0, msg.indexOf(",")));
-  float y = int(msg.substring(msg.indexOf(",") + 1));
-  bombs.add(new Bomb(new PVector(x, 0, -y)));
+  float x =  float(msg.substring(0, msg.indexOf(",")));
+  float y =  float(msg.substring(msg.indexOf(",") + 1));
+  bombs.add(new Bomb(new PVector(width *x, 0, -height*(1-y))));
 }
 
 void ground() {
