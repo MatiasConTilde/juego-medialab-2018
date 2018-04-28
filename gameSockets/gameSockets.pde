@@ -3,16 +3,18 @@ import websockets.*;
 final float totalGrid = 5;
 
 WebsocketServer ws;
+//Upnp upnp;
 
-Player player;Lifes lifes;
-
+Player player;
+Lifes lifes;
 ArrayList<Bomb> bombs;
 
 void setup() {
   //size(576, 471, P3D);
   size(192, 157, P3D);
-
-  ws = new WebsocketServer(this, 8025, "/");
+  //upnp = new Upnp(1234,true);
+  //ws = new WebsocketServer(this, upnp.getPort(), upnp.getLocalAddress());
+  ws = new WebsocketServer(this, 8001,"/");
 
   player = new Player();
   lifes = new Lifes(5);
@@ -79,3 +81,8 @@ void ground() {
     line(0, height, i * height / totalGrid - height, width, height, i * height / totalGrid - height);
   }
 }
+//void exit() {//doesn't work with stop button!!!!
+//upnp.free();
+//println("EXITED CORRECTLY");
+//super.exit();
+//}
