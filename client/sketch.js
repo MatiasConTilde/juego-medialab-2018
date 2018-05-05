@@ -1,63 +1,43 @@
-class Player {
-  constructor() {
-    this.x = 0;
-    this.y = 0;
-  }
-
-  set text(text) {
-    this.x = canvas.width*Number(text.substr(0, text.indexOf(',')));
-    this.y = canvas.height*Number(text.substr(text.indexOf(',')+1));
-  }
-}
-
-class Bomb {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-    ws.send(x/canvas.width + "," + y/canvas.height);
-
-    this.radius = 100;
-  }
-
-  update() {
-    this.radius--;
-  }
-
-  draw() {
-    ellipse(this.x, this.y, this.radius, this.radius);
-  }
-
-  get delete() {
-    return this.radius <= 0;
-  }
-}
-
-var ws = new WebSocket('ws://90.173.7.86:1234/');
-
-let bombs = [];
 let player = new Player();
+let bombs = [];
+
+let ws = new WebSocket('ws://' + window.location.search.substr(1));
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  rectMode(CENTER);
 }
 
 function draw() {
-  background(120, 30, 80);
+  background(51);
 
   for (let i = bombs.length - 1; i > 0; i--) {
-    b = bombs[i];
-    if (b.delete) bombs.splice(i, 1);
+    let b = bombs[i];
     b.update();
-    b.draw();
+    if (b.dead) bombs.splice(i, 0);
+    else b.draw();
   }
 
-  rect(player.x, player.y, 100, 100);
+  player.draw();
 }
 
 function mousePressed() {
-  bombs.push(new Bomb(mouseX, mouseY));
+  ws.send({
+    bomb: {
+      x: mouseX / width,
+      y: mouseY / height
+    }
+  });
 }
 
 ws.onmessage = function (msg) {
-  player.text = msg.data
+  const packet = JSON.parse(msg);
+
+  if (packet.player) {
+    player.pos = packet.player;
+  }
+
+  if (packet.bomb) {
+    bombs.push(new Bomb(packet.bomb));
+  }
 }
