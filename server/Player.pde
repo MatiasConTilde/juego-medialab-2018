@@ -7,7 +7,7 @@ class Player {
 
   Player() {
     pos = new PVector();
-    size = 15;
+    size = width/10;
     lifes = 3;
   }
 

@@ -2,9 +2,9 @@ import websockets.*;
 
 final float totalGrid = 5;
 
-Upnp upnp;
+//Upnp upnp;
 WebsocketServer ws;
-Upnp upnp;
+
 
 Player player;
 Lifes lifes;
@@ -15,13 +15,9 @@ void setup() {
   //size(576, 471, P3D);
   size(192, 157, P3D);
   
-  upnp = new Upnp(9660, true);
-  println(upnp.getLocalAddress());
-  println(upnp.getExternalIP());
-  println(upnp.getPort());
-
-  ws = new WebsocketServer(this, upnp.getPort(), "/");
-
+  //ws = new WebsocketServer(this, upnp.getPort(), "/");
+  ws = new WebsocketServer(this, 8001, "/");
+  
   player = new Player();
   lifes = new Lifes(5);
   bombs = new ArrayList();
@@ -49,17 +45,12 @@ void draw() {
           player.hit();
           translate(b.pos.x, b.pos.y, b.pos.z);
           fill(255, 0, 0);
-          //sphere(100);
           popMatrix();
         }
         b.hit = true;
       }
-      if (!b.hit) {           //quita las que no explotan
+      if (!b.hit || b.remove) {
         bombs.remove(b);
-      }
-
-      if (b.remove) {      //remove=1 después de la explosion
-        bombs.remove(b);    //quita las
       }
     }
 
@@ -86,8 +77,8 @@ void ground() {
     line(0, height, i * height / totalGrid - height, width, height, i * height / totalGrid - height);
   }
 }
-void exit() {//doesn't work with stop button!!!!
-upnp.free();
-println("EXITED CORRECTLY");
-super.exit();
-}
+//void exit() {//doesn't work with stop button!!!!
+//upnp.free();
+//println("EXITED CORRECTLY");
+//super.exit();
+//}
