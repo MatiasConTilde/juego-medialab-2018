@@ -13,7 +13,12 @@ class Player {
 
   void move(float x, float z) {
     pos.set(x, height - size / 2, z);
-    ws.sendMessage(x + "," + z);
+    try {
+      ws.sendMessage(x/width + "," + (1+z/height));
+    }
+    catch(Exception e) {
+      print("Exception, reload bug (socket is closing)"+ e);
+    }
   }
 
   boolean explode(Bomb b) {

@@ -4,9 +4,9 @@ class Player {
     this.y = 0;
   }
 
-  set text(text)  {
-    this.x = text.substr(0, text.indexOf(','));
-    this.y = -text.substr(text.indexOf(',') + 1);
+  set text(text) {
+    this.x = canvas.width*Number(text.substr(0, text.indexOf(',')));
+    this.y = canvas.height*Number(text.substr(text.indexOf(',')+1));
   }
 }
 
@@ -14,7 +14,7 @@ class Bomb {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    ws.send(x + "," + y);
+    ws.send(x/canvas.width + "," + y/canvas.height);
 
     this.radius = 100;
   }
