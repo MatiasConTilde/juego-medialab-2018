@@ -5,7 +5,6 @@ class Lifes{
    lifes = l;
  }
  
-  
  void display(){
    for(int i=0; i<lifes; i++){
      pushMatrix();

@@ -32,7 +32,7 @@ class Bomb {
   }
 }
 
-var ws = new WebSocket('ws://90.173.7.86:1234/');
+var ws = new WebSocket('ws://0.0.0.0:8001');
 
 let bombs = [];
 let player = new Player();
