@@ -2,17 +2,24 @@ import websockets.*;
 
 final float totalGrid = 5;
 
+Upnp upnp;
 WebsocketServer ws;
 
-Player player;Lifes lifes;
+Player player;
+Lifes lifes;
 
 ArrayList<Bomb> bombs;
 
 void setup() {
   //size(576, 471, P3D);
   size(192, 157, P3D);
+  
+  upnp = new Upnp(9660, true);
+  println(upnp.getLocalAddress());
+  println(upnp.getExternalIP());
+  println(upnp.getPort());
 
-  ws = new WebsocketServer(this, 8025, "/");
+  ws = new WebsocketServer(this, upnp.getPort(), "/");
 
   player = new Player();
   lifes = new Lifes(5);

@@ -4,7 +4,7 @@ class Player {
     this.y = 0;
   }
 
-  set text(text) {
+  set text(text)  {
     this.x = text.substr(0, text.indexOf(','));
     this.y = -text.substr(text.indexOf(',') + 1);
   }
@@ -32,7 +32,7 @@ class Bomb {
   }
 }
 
-var ws = new WebSocket('ws://localhost:8025/');
+var ws = new WebSocket('ws://90.173.7.86:1234/');
 
 let bombs = [];
 let player = new Player();
@@ -44,7 +44,7 @@ function setup() {
 function draw() {
   background(120, 30, 80);
 
-  for (let i = bombs.length-1; i > 0; i--) {
+  for (let i = bombs.length - 1; i > 0; i--) {
     b = bombs[i];
     if (b.delete) bombs.splice(i, 1);
     b.update();
@@ -58,6 +58,6 @@ function mousePressed() {
   bombs.push(new Bomb(mouseX, mouseY));
 }
 
-ws.onmessage = function(msg) {
+ws.onmessage = function (msg) {
   player.text = msg.data
 }
