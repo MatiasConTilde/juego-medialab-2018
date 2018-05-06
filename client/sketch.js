@@ -22,22 +22,21 @@ function draw() {
 }
 
 function mousePressed() {
-  ws.send({
-    bomb: {
-      x: mouseX / width,
-      y: mouseY / height
-    }
-  });
+  ws.send(JSON.stringify({
+    type: 'bomb',
+    x: mouseX / width,
+    y: mouseY / height
+  }));
 }
 
 ws.onmessage = function (msg) {
-  const packet = JSON.parse(msg);
+  const packet = JSON.parse(msg.data);
 
-  if (packet.player) {
-    player.pos = packet.player;
+  if (packet.type === 'player') {
+    player.pos = packet;
   }
 
-  if (packet.bomb) {
-    bombs.push(new Bomb(packet.bomb));
+  if (packet.type === 'bomb') {
+    bombs.push(new Bomb(packet));
   }
 }

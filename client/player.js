@@ -4,12 +4,12 @@ class Player {
     this.y = 0;
   }
 
-  set pos(object) {
-    this.x = object.x;
-    this.y = object.y;
+  set pos(obj) {
+    this.x = obj.x;
+    this.y = obj.y;
   }
 
   draw() {
-    rect(player.x * width, player.y * height, width / 10, width / 10);
+    rect(this.x * width, this.y * height, width / 10, width / 10);
   }
 }

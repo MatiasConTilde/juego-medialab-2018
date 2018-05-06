@@ -3,40 +3,33 @@ class Player {
   float size;
   boolean hit;
   int hit_timer;
-  int lifes;
 
   Player() {
     pos = new PVector();
-    size = width/10;
-    lifes = 3;
+    size = 0.1;
   }
 
-  void move(float x, float z) {
-    pos.set(x, height - size / 2, z);
-    try {
-      ws.sendMessage(x/width + "," + (1+z/height));
-    }
-    catch(Exception e) {
-      print("Exception, reload bug (socket is closing)"+ e);
-    }
+  void move(float x, float y) {
+    pos.set(x, y);
+    sendPacket("player", x, y);
   }
 
   boolean explode(Bomb b) {
-    return pos.dist(b.pos) < size + b.size;
+    return dist(pos.x, pos.y, b.pos.x, b.pos.y) < size/2 + b.size;
   }
 
   void display() {
     noStroke();
     fill(0, 255, 0);
     pushMatrix();
-    translate(pos.x, pos.y, pos.z);
-    if (hit & hit_timer<40) {
+    translate(pos.x * width, height - size * width / 2, (pos.y * height) - height);
+    if (hit && hit_timer<40) {
       if (random(1)<0.5) {
-        box(size);
+        box(size * width);
       }
       hit_timer++;
     } else {
-      box(size);
+      box(size * width);
       hit=false;
     }
     popMatrix();

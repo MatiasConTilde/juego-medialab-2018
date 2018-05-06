@@ -9,18 +9,18 @@ class Bomb {
 
   Bomb(PVector _pos) {
     pos = _pos.copy();
-    size = width*.026;
+    size = 0.05;
     hit = false;
     remove = false;
     burst = 0;
   }
 
   void update() {
-    pos.y += height/80;
+    pos.z += float(height) / 80;
   }
 
   boolean explode() {
-    return pos.y >= height - size;
+    return pos.z >= height - size * width;
   }
 
   void display() {
@@ -32,20 +32,21 @@ class Bomb {
     }
 
     pushMatrix();
-    translate(pos.x, pos.y, pos.z);
-    sphere(min(size + burst, size + 20));
+    translate(pos.x * width, pos.z, (1-pos.y) * -height);
+    sphere(size * width + burst);
     popMatrix();
 
     if (hit) {
-      burst += .2;
-      if (burst>22) {
-        remove= true;
+      burst += 0.2;
+      if (burst > 10) {
+        burst = 0;
+        remove = true;
       }
-      pos.y -= height/80;
+      pos.z = height - size * width;
     }
 
     stroke(255, 0, 0);
     strokeWeight(1);
-    line(pos.x, pos.y, pos.z, pos.x, height, pos.z);
+    line(pos.x * width, pos.z, (1-pos.y) * -height, pos.x * width, height, (1-pos.y) * -height);
   }
 }

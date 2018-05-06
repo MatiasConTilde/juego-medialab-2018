@@ -1,7 +1,7 @@
 class Bomb {
-  constructor(object) {
-    this.x = object.x;
-    this.y = object.y;
+  constructor(obj) {
+    this.x = obj.x;
+    this.y = obj.y;
     this.z = 1;
   }
 
@@ -10,7 +10,7 @@ class Bomb {
   }
 
   draw() {
-    ellipse(this.x * width, this.y * height, this.z * 100);
+    ellipse(this.x * width, this.y * height, this.z * (width / 10));
   }
 
   get dead() {
