@@ -1,9 +1,13 @@
 import websockets.*;
+import com.cage.zxing4p3.*;
 
 final float totalGrid = 5;
 
-//Upnp upnp;
+Upnp upnp;
 WebsocketServer ws;
+
+ZXING4P zxing;
+PImage qrImg;
 
 Player player;
 Lives lives;
@@ -11,11 +15,16 @@ Lives lives;
 ArrayList<Bomb> bombs;
 
 void setup() {
-  //size(576, 471, P3D);
-  size(192, 157, P3D);
+  size(576, 471, P3D);
+  //size(192, 157, P3D);
 
-  //ws = new WebsocketServer(this, upnp.getPort(), "/");
-  ws = new WebsocketServer(this, 8001, "/");
+  upnp = new Upnp(8000);
+  println(upnp.getExternalIP());
+
+  ws = new WebsocketServer(this, upnp.getPort(), "/");
+
+  zxing = new ZXING4P();
+  qrImg = zxing.generateQRCode("http://cd-mlp.matiascontilde.com/?"+upnp.getExternalIP()+":"+upnp.getPort(), 50, 50);
 
   player = new Player();
   lives = new Lives(5);
@@ -26,6 +35,9 @@ void draw() {
   background(0);
   lights();
   ground();
+
+  fill(255);
+  image(qrImg, 0, 0);
 
   player.display();
   lives.display();
@@ -59,7 +71,11 @@ void mouseMoved() {
 }
 
 void keyPressed() {
-  bombs.add(new Bomb(new PVector(random(1), random(1))));
+  newBomb(random(1), random(1));
+}
+
+void mousePressed() {
+  newBomb(float(mouseX) / width, float(mouseY) / height);
 }
 
 void webSocketServerEvent(String msg) {
@@ -67,8 +83,7 @@ void webSocketServerEvent(String msg) {
   JSONObject packet = parseJSONObject(msg);
 
   if (packet.getString("type").equals("bomb")) {
-    bombs.add(new Bomb(new PVector(packet.getFloat("x"), packet.getFloat("y"))));
-    sendPacket("bomb", packet.getFloat("x"), packet.getFloat("y"));
+    newBomb(packet.getFloat("x"), packet.getFloat("y"));
   }
 }
 
@@ -82,11 +97,16 @@ void ground() {
   }
 }
 
-// void exit() { // doesn't work with stop button!!!!
-//   upnp.free();
-//   println("Closed UPNP");
-//   super.exit();
-// }
+void exit() { // doesn't work with stop button!!!!
+  upnp.free();
+  println("Closed UPNP");
+  super.exit();
+}
+
+void newBomb(float x, float y) {
+  bombs.add(new Bomb(new PVector(x, y)));
+  sendPacket("bomb", x, y);
+}
 
 void sendPacket(String type, float x, float y) {
   JSONObject packet = new JSONObject();

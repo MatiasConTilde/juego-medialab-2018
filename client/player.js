@@ -1,7 +1,7 @@
 class Player {
   constructor() {
-    this.x = 0;
-    this.y = 0;
+    this.x = 0.5;
+    this.y = 0.5;
   }
 
   set pos(obj) {
