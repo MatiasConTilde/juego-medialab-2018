@@ -34,12 +34,13 @@ import java.util.Date;
 import java.util.Map;
 
 class Upnp {
-  private  int PORT = 6991;
-  //private  short WAIT_TIME = 2;
-  private  boolean LIST_ALL_MAPPINGS = false;
+  private int PORT = 6991;
+  private boolean LIST_ALL_MAPPINGS = false;
+
   GatewayDiscover gatewayDiscover;
   PortMappingEntry portMapping;
   GatewayDevice activeGW;
+
   Upnp (int port, boolean force) {
     PORT = port;
     try {
@@ -78,7 +79,6 @@ class Upnp {
         return;
       }
 
-
       // testing PortMappingNumberOfEntries
       Integer portMapCount = activeGW.getPortMappingNumberOfEntries();
       addLogLine("GetPortMappingNumberOfEntries: " + (portMapCount!=null?portMapCount.toString():"(unsupported)"));
@@ -107,7 +107,6 @@ class Upnp {
       addLogLine("Using local address: "+ localAddress.getHostAddress());
       String externalIPAddress = activeGW.getExternalIPAddress();
       addLogLine("External address: "+ externalIPAddress);
-
 
       addLogLine("Querying device to see if a port mapping already exists for port "+ PORT);
 
@@ -147,9 +146,11 @@ class Upnp {
       println(e);
     }
   }
+
   Upnp (int port) {
     this(port, false);
   }
+
   boolean free() {
     try {
       if (activeGW.deletePortMapping(PORT, "TCP")) {
@@ -165,12 +166,13 @@ class Upnp {
       return false;
     }
   }
-  private  void addLogLine(String line) {
 
+  private void addLogLine(String line) {
     String timeStamp = DateFormat.getTimeInstance().format(new Date());
     String logline = timeStamp+": "+line+"\n";
     print(logline);
   }
+
   String getLocalAddress() {
     try {
       return activeGW.getLocalAddress().getHostAddress();
@@ -180,6 +182,7 @@ class Upnp {
       return null;
     }
   }
+
   String getExternalIP() {
     try {
       return activeGW.getExternalIPAddress();
@@ -189,6 +192,7 @@ class Upnp {
       return null;
     }
   }
+
   int getPort() {
     return PORT;
   }

@@ -18,13 +18,9 @@ void setup() {
   size(576, 471, P3D);
   //size(192, 157, P3D);
 
-  upnp = new Upnp(8000);
-  println(upnp.getExternalIP());
-
-  ws = new WebsocketServer(this, upnp.getPort(), "/");
-
   zxing = new ZXING4P();
-  qrImg = zxing.generateQRCode("http://cd-mlp.matiascontilde.com/?"+upnp.getExternalIP()+":"+upnp.getPort(), 50, 50);
+
+  resetUpnp();
 
   player = new Player();
   lives = new Lives(5);
@@ -48,8 +44,6 @@ void draw() {
     b.update();
 
     if (b.explode()) {
-      println(player.pos, b.pos, dist(player.pos.x, player.pos.y, b.pos.x, b.pos.y));
-
       if (player.explode(b) && !b.hit) {
         lives.lives--;
         player.hit();
@@ -79,7 +73,6 @@ void mousePressed() {
 }
 
 void webSocketServerEvent(String msg) {
-  println(msg);
   JSONObject packet = parseJSONObject(msg);
 
   if (packet.getString("type").equals("bomb")) {
@@ -97,10 +90,16 @@ void ground() {
   }
 }
 
-void exit() { // doesn't work with stop button!!!!
-  upnp.free();
-  println("Closed UPNP");
-  super.exit();
+boolean resetUpnp() {
+  if (ws != null) ws.dispose();
+  if (upnp != null) upnp.free();
+
+  upnp = new Upnp(ceil(random(1024, 65535)));
+  //upnp = new Upnp(8000);
+  ws = new WebsocketServer(this, upnp.getPort(), "/");
+  qrImg = zxing.generateQRCode("http://cd-mlp.matiascontilde.com/?"+upnp.getExternalIP()+":"+upnp.getPort(), 50, 50);
+
+  return true;
 }
 
 void newBomb(float x, float y) {
@@ -119,4 +118,9 @@ void sendPacket(String type, float x, float y) {
   catch(Exception e) {
     print("Exception, reload bug (socket is closed) " + e);
   }
+}
+
+void exit() { // doesn't work with stop button!!!!
+  upnp.free();
+  super.exit();
 }
