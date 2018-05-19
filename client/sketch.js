@@ -11,14 +11,14 @@ function setup() {
 function draw() {
   background(51);
 
+  player.draw();
+
   for (let i = bombs.length - 1; i > 0; i--) {
     let b = bombs[i];
     b.update();
     if (b.dead) bombs.splice(i, 0);
     else b.draw();
   }
-
-  player.draw();
 }
 
 function mousePressed() {

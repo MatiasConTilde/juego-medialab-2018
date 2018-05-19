@@ -10,21 +10,25 @@ ZXING4P zxing;
 PImage qrImg;
 
 Player player;
-Lives lives;
 
 ArrayList<Bomb> bombs;
 
+PFont font;
+
 void setup() {
-  size(576, 471, P3D);
-  //size(192, 157, P3D);
+  //size(576, 471, P3D);
+  size(192, 157, P3D);
 
   zxing = new ZXING4P();
 
   resetUpnp();
 
   player = new Player();
-  lives = new Lives(5);
   bombs = new ArrayList();
+
+  font = createFont("m5x7.ttf", 32);
+  textFont(font);
+  textAlign(CENTER, TOP);
 }
 
 void draw() {
@@ -36,7 +40,6 @@ void draw() {
   image(qrImg, 0, 0);
 
   player.display();
-  lives.display();
 
   for (int i = bombs.size() - 1; i >= 0; i--) {
     Bomb b = bombs.get(i);
@@ -45,7 +48,6 @@ void draw() {
 
     if (b.explode()) {
       if (player.explode(b) && !b.hit) {
-        lives.lives--;
         player.hit();
         fill(255, 0, 0);
         b.hit = true;
@@ -94,10 +96,12 @@ boolean resetUpnp() {
   if (ws != null) ws.dispose();
   if (upnp != null) upnp.free();
 
-  upnp = new Upnp(ceil(random(1024, 65535)));
-  //upnp = new Upnp(8000);
-  ws = new WebsocketServer(this, upnp.getPort(), "/");
-  qrImg = zxing.generateQRCode("http://cd-mlp.matiascontilde.com/?"+upnp.getExternalIP()+":"+upnp.getPort(), 50, 50);
+  //upnp = new Upnp(ceil(random(1024, 65535)));
+  //ws = new WebsocketServer(this, upnp.getPort(), "/");
+  //qrImg = zxing.generateQRCode("http://cd-mlp.matiascontilde.com/?"+upnp.getExternalIP()+":"+upnp.getPort(), 50, 50);
+
+  ws = new WebsocketServer(this, 8000, "/");
+  qrImg = zxing.generateQRCode("http://localhost:8080/?localhost:8000", 38, 38);
 
   return true;
 }
@@ -121,6 +125,6 @@ void sendPacket(String type, float x, float y) {
 }
 
 void exit() { // doesn't work with stop button!!!!
-  upnp.free();
+  //upnp.free();
   super.exit();
 }

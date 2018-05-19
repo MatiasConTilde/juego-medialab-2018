@@ -3,10 +3,12 @@ class Player {
   float size;
   boolean hit;
   int hit_timer;
+  int lives;
 
   Player() {
     pos = new PVector();
     size = 0.1;
+    lives = 5;
   }
 
   void move(float x, float y) {
@@ -33,10 +35,14 @@ class Player {
       hit=false;
     }
     popMatrix();
+
+    text("Lives: "+lives, width/2, 20);
   }
 
   void hit() {
     hit = true;
     hit_timer = 0;
+
+    lives--;
   }
 }
