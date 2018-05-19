@@ -37,8 +37,8 @@ class Bomb {
     popMatrix();
 
     if (hit) {
-      burst += float(height)/785;
-      if (burst > float(height)/15.7) {
+      burst += height/785f;
+      if (burst > height/15.7) {
         burst = 0;
         remove = true;
       }
