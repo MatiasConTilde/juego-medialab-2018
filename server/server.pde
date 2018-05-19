@@ -8,6 +8,7 @@ WebsocketServer ws;
 
 ZXING4P zxing;
 PImage qrImg;
+PFont myFont;
 
 Player player;
 
@@ -20,7 +21,12 @@ void setup() {
   size(192, 157, P3D);
 
   zxing = new ZXING4P();
-
+  
+  myFont = createFont("ARCADECLASSIC.ttf", 32);
+  textFont(myFont);
+  textAlign(CENTER, CENTER);
+  textSize(float(height)/15);
+  
   resetUpnp();
 
   player = new Player();
@@ -38,7 +44,12 @@ void draw() {
 
   fill(255);
   image(qrImg, 0, 0);
-
+  
+  //temp
+  textSize(float(height)/4 + float(height)/200 * sin(frameCount*0.2));
+  text("P L A Y", width/2, height/2,-height);
+  //temp
+  
   player.display();
 
   for (int i = bombs.size() - 1; i >= 0; i--) {
