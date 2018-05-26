@@ -11,53 +11,40 @@ PImage qrImg;
 PFont font;
 
 Player player;
-
 ArrayList<Bomb> bombs;
+
+State state;
 
 void setup() {
   //size(576, 471, P3D);
   size(192, 157, P3D);
 
   zxing = new ZXING4P();
-
   resetUpnp();
+  font = createFont("m5x7.ttf", 32);
+  textFont(font);
+  textAlign(CENTER, TOP);
 
   player = new Player();
   bombs = new ArrayList();
 
-  font = createFont("m5x7.ttf", 32);
-  textFont(font);
-  textAlign(CENTER, TOP);
+  state = State.DEMO;
 }
 
 void draw() {
-  background(0);
-  lights();
-  ground();
-
-  fill(255);
-  image(qrImg, 0, 0);
-
-  player.display();
-
-  for (int i = bombs.size() - 1; i >= 0; i--) {
-    Bomb b = bombs.get(i);
-
-    b.update();
-
-    if (b.explode()) {
-      if (player.explode(b) && !b.hit) {
-        player.hit();
-        fill(255, 0, 0);
-        b.hit = true;
-      }
-
-      if (!b.hit || b.remove) {
-        bombs.remove(b);
-      }
-    }
-
-    b.display();
+  switch(state) {
+  case DEMO:
+    stateDemo();
+    break;
+  case PLAY:
+    statePlay();
+    break;
+  case WIN:
+    stateWin();
+    break;
+  case LOSE:
+    stateLose();
+    break;
   }
 }
 
