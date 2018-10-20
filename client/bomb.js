@@ -10,7 +10,7 @@ class Bomb {
   }
 
   draw() {
-    ellipse(this.x * width, this.y * height, this.z * (width / 10));
+    circle(this.x * canvas.width, this.y * canvas.height, this.z * (canvas.width / 10));
   }
 
   get dead() {

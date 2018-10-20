@@ -10,6 +10,7 @@ class Player {
   }
 
   draw() {
-    rect(this.x * width, this.y * height, width / 10, width / 10);
+    fill(255);
+    rect(this.x * canvas.width, this.y * canvas.height, canvas.width / 10, canvas.width / 10);
   }
 }

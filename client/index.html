@@ -2,28 +2,32 @@
 <html>
 
 <head>
-  <meta charset="utf-8">
-  <title>websockets</title>
+	<meta charset="utf-8">
+	<title>websockets</title>
 
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.min.js"></script> -->
-  <script src="p5.js" type="text/javascript"></script>
+	<style>
+		html, body {
+			overflow: hidden;
+		}
 
-  <script src="player.js" type="text/javascript"></script>
-  <script src="bomb.js" type="text/javascript"></script>
-  <script src="sketch.js" type="text/javascript"></script>
+		body {
+			padding: 0;
+			margin: 0;
+		}
 
-  <style>
-    body {
-      padding: 0;
-      margin: 0;
-    }
-
-    canvas {
-      vertical-align: top;
-    }
-  </style>
+		canvas {
+			vertical-align: top;
+		}
+	</style>
 </head>
 
-<body></body>
+<body>
+	<canvas id="canvas"></canvas>
+
+	<script src="draw.js" type="text/javascript"></script>
+	<script src="player.js" type="text/javascript"></script>
+	<script src="bomb.js" type="text/javascript"></script>
+	<script src="sketch.js" type="text/javascript"></script>
+</body>
 
 </html>
