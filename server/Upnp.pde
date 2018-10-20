@@ -26,6 +26,7 @@
  * refer to miniupnpc-1.0-RC8
  */
 //wrapper by Pablo Fernández Robledo
+//TODO: put library in code folder!
 import org.bitlet.weupnp.*;
 
 import java.net.InetAddress;
