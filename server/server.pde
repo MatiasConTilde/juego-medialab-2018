@@ -1,10 +1,10 @@
-import websockets.*;
 import com.cage.zxing4p3.*;
 
 final float totalGrid = 5;
 
+final boolean ENABLE_UPNP = false;
 Upnp upnp;
-WebsocketServer ws;
+WsServer ws;
 
 ZXING4P zxing;
 PImage qrImg;
@@ -24,6 +24,7 @@ void setup() {
   font = createFont("m5x7.ttf", 32);
   textFont(font);
   textAlign(CENTER, TOP);
+  imageMode(CENTER);
 
   player = new Player();
   bombs = new ArrayList();
@@ -60,14 +61,6 @@ void mousePressed() {
   newBomb(float(mouseX) / width, float(mouseY) / height);
 }
 
-void webSocketServerEvent(String msg) {
-  JSONObject packet = parseJSONObject(msg);
-
-  if (packet.getString("type").equals("bomb")) {
-    newBomb(packet.getFloat("x"), packet.getFloat("y"));
-  }
-}
-
 void ground() {
   stroke(255);
   strokeWeight(1.5);
@@ -79,15 +72,28 @@ void ground() {
 }
 
 boolean resetUpnp() {
-  if (ws != null) ws.dispose();
   if (upnp != null) upnp.free();
 
-  //upnp = new Upnp(ceil(random(1024, 65535)));
-  //ws = new WebsocketServer(this, upnp.getPort(), "/");
-  //qrImg = zxing.generateQRCode("http://cd-mlp.matiascontilde.com/?"+upnp.getExternalIP()+":"+upnp.getPort(), 50, 50);
+  try { 
+    if (ws != null) {
+      ws.stop(1000);
+    }
+  } 
+  catch (InterruptedException e) {
+  }
 
-  ws = new WebsocketServer(this, 8000, "/");
-  qrImg = zxing.generateQRCode("http://localhost:8080/?localhost:8000", 38, 38);
+  int port = ceil(random(1024, 65535));
+
+  if (ENABLE_UPNP) {
+    upnp = new Upnp(port);
+    println("http://cd-mlp.matiascontilde.com/?"+upnp.getExternalIP()+":"+upnp.getPort());
+    qrImg = zxing.generateQRCode("http://cd-mlp.matiascontilde.com/?"+upnp.getExternalIP()+":"+upnp.getPort(), 50, 50);
+  } else {
+    println(port);
+    qrImg = zxing.generateQRCode("http://localhost:8080/?localhost:"+port, 48, 48);
+  }
+
+  ws = new WsServer(port);
 
   return true;
 }
@@ -103,7 +109,7 @@ void sendPacket(String type, float x, float y) {
   packet.setFloat("x", x);
   packet.setFloat("y", y);
   try {
-    ws.sendMessage(packet.toString());
+    ws.broadcast(packet.toString());
   }
   catch(Exception e) {
     print("Exception, reload bug (socket is closed) " + e);
@@ -111,6 +117,12 @@ void sendPacket(String type, float x, float y) {
 }
 
 void exit() { // doesn't work with stop button!!!!
-  //upnp.free();
+  try { 
+    ws.stop(1000);
+  } 
+  catch (InterruptedException e) {
+  }
+
+  if (ENABLE_UPNP) upnp.free();
   super.exit();
 }

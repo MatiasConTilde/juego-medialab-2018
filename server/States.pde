@@ -3,17 +3,16 @@ enum State {
 }
 
 void stateDemo() {
-  // DEMO
-  state = State.PLAY;
+  background(0);
+  fill(255);
+  text("Scan this QR code with your phone to start", 8, 52, width-8, height);
+  image(qrImg, width/2, qrImg.height/2);
 }
 
 void statePlay() {
   background(0);
   lights();
   ground();
-
-  fill(255);
-  image(qrImg, 0, 0);
 
   player.display();
 
@@ -39,11 +38,13 @@ void statePlay() {
 }
 
 void stateWin() {
-  // DEMO
-  state = State.PLAY;
+  background(0);
+  fill(255);
+  text("You won.", 8, 52, width-8, height);
 }
 
 void stateLose() {
-  // DEMO
-  state = State.PLAY;
+  background(0);
+  fill(255);
+  text("You lost.", 8, 52, width-8, height);
 }

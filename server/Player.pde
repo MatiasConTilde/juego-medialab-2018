@@ -6,6 +6,10 @@ class Player {
   int lives;
 
   Player() {
+    init();
+  }
+
+  void init() {
     pos = new PVector();
     size = 0.1;
     lives = 5;
