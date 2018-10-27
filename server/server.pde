@@ -12,6 +12,7 @@ PFont font;
 
 Player player;
 ArrayList<Bomb> bombs;
+HashMap<String, Float> hues = new HashMap(3);
 
 State state;
 
@@ -53,14 +54,6 @@ void mouseMoved() {
   player.move(float(mouseX) / width, float(mouseY) / height);
 }
 
-void keyPressed() {
-  newBomb(random(1), random(1));
-}
-
-void mousePressed() {
-  newBomb(float(mouseX) / width, float(mouseY) / height);
-}
-
 void ground() {
   stroke(255);
   strokeWeight(1.5);
@@ -98,16 +91,31 @@ boolean resetUpnp() {
   return true;
 }
 
-void newBomb(float x, float y) {
-  bombs.add(new Bomb(new PVector(x, y)));
-  sendPacket("bomb", x, y);
+void newBomb(float x, float y, String id) {
+
+  float hue;
+
+  if (hues.containsKey(id)) {
+    hue = hues.get(id);
+  } else {
+    hue = random(360);
+    hues.put(id, hue);
+  }
+  print(id, hue);
+  bombs.add(new Bomb(new PVector(x, y), hue));
+  sendPacket("bomb", x, y, hue);
 }
 
 void sendPacket(String type, float x, float y) {
+  sendPacket(type, x, y, 0);
+}
+
+void sendPacket(String type, float x, float y, float hue) {
   JSONObject packet = new JSONObject();
   packet.setString("type", type);
   packet.setFloat("x", x);
   packet.setFloat("y", y);
+  packet.setFloat("hue", hue);
   try {
     ws.broadcast(packet.toString());
   }

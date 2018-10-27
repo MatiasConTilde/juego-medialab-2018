@@ -29,7 +29,7 @@ class WsServer extends WebSocketServer {
     JSONObject packet = parseJSONObject(msg);
 
     if (packet.getString("type").equals("bomb")) {
-      newBomb(packet.getFloat("x"), packet.getFloat("y"));
+      newBomb(packet.getFloat("x"), packet.getFloat("y"), conn.getRemoteSocketAddress().toString());
     }
   }
 

@@ -10,7 +10,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 setInterval(() => {
-  background(51);
+  background(15);
 
   player.draw();
 

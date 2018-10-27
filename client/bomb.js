@@ -3,6 +3,7 @@ class Bomb {
     this.x = obj.x;
     this.y = obj.y;
     this.z = 1;
+    this.hue = obj.hue;
   }
 
   update() {
@@ -10,6 +11,7 @@ class Bomb {
   }
 
   draw() {
+    fill(this.hue);
     circle(this.x * canvas.width, this.y * canvas.height, this.z * (canvas.width / 10));
   }
 

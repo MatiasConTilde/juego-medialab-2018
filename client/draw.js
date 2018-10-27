@@ -1,9 +1,9 @@
-function fill(color) {
-  ctx.fillStyle = `rgb(${color},${color},${color})`;
+function fill(hue, saturation = 75, lightness = 50) {
+  ctx.fillStyle = `hsl(${hue},${saturation}%,${lightness}%)`;
 }
 
-function background(color) {
-  fill(color);
+function background(lightness) {
+  fill(0, 0, lightness);
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 

@@ -4,15 +4,17 @@ class Bomb {
 
   boolean hit;
   boolean remove;
-
   float burst;
 
-  Bomb(PVector _pos) {
+  float hue;
+
+  Bomb(PVector _pos, float _hue) {
     pos = _pos.copy();
     size = 0.05;
     hit = false;
     remove = false;
     burst = 0;
+    hue = _hue;
   }
 
   void update() {
@@ -26,7 +28,9 @@ class Bomb {
   void display() {
     noStroke();
     if (burst == 0) {
-      fill(255, 0, 0);
+      colorMode(HSB, 360, 100, 100);
+      fill(hue, 100, 100);
+      colorMode(RGB);
     } else {
       fill(255, 0, 0, 200);
     }
